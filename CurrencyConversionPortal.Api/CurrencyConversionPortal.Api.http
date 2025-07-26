@@ -1,6 +1,26 @@
 @CurrencyConversionPortal.Api_HostAddress = http://localhost:5163
 
-GET {{CurrencyConversionPortal.Api_HostAddress}}/.../
-Accept: application/json
+### Register a new user
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### Login with user credentials
+# @name login
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### Logout (requires authentication cookie from login)
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/logout
+Content-Type: application/json
 
 ###
