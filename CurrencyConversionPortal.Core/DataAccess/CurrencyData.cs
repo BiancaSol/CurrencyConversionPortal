@@ -1,7 +1,7 @@
 ﻿namespace CurrencyConversionPortal.Core.DataAccess
 {
+    using CurrencyConversionPortal.Core.ExternalServices;
     using CurrencyConversionPortal.Core.Entities;
-    using CurrencyConversionPortal.Core.Services.Api;
     using Microsoft.Extensions.Caching.Memory;
     using System;
     using System.Collections.Generic;

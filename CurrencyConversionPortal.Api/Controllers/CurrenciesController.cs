@@ -41,7 +41,7 @@ namespace CurrencyConversionPortal.Api.Controllers
                 ConvertedAmounts = conversionModel.Results
             };
 
-            return Ok(new { conversion = response });
+            return Ok(response);
         }
     }
 }
