@@ -1,10 +1,10 @@
 namespace CurrencyConversionPortal.Core.Services
 {
+    using CurrencyConversionPortal.Core.ExternalServices;
     using CurrencyConversionPortal.Core.DataAccess;
     using CurrencyConversionPortal.Core.Entities;
     using CurrencyConversionPortal.Core.Models;
     using CurrencyConversionPortal.Core.Models.Api;
-    using CurrencyConversionPortal.Core.Services.Api;
     using System;
     using System.Collections.Generic;
     using System.Linq;

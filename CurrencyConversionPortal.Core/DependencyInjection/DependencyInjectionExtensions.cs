@@ -1,8 +1,8 @@
 ﻿namespace CurrencyConversionPortal.Core.DependencyInjection
 {
+    using CurrencyConversionPortal.Core.ExternalServices;
     using CurrencyConversionPortal.Core.DataAccess;
     using CurrencyConversionPortal.Core.Services;
-    using CurrencyConversionPortal.Core.Services.Api;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class DependencyInjectionExtensions

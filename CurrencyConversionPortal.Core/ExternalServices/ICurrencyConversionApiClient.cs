@@ -1,4 +1,4 @@
-namespace CurrencyConversionPortal.Core.Services.Api
+namespace CurrencyConversionPortal.Core.ExternalServices
 {
     using CurrencyConversionPortal.Core.Models.Api;
     using System.Collections.Generic;
