@@ -8,7 +8,7 @@ namespace CurrencyConversionPortal.Api.Controllers
     using System.Threading.Tasks;
 
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "StandardUser")]
     [Route("api/[controller]")]
     public class CurrenciesController : ControllerBase
     {
