@@ -57,7 +57,7 @@ namespace CurrencyConversionPortal.Api.Controllers
             return Ok(new { message = "Login successful." });
         }
 
-        [Authorize]
+        [Authorize(Policy = "StandardUser")]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

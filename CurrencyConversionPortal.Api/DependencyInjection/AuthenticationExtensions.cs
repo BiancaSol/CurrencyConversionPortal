@@ -23,6 +23,12 @@
                 options.LogoutPath = "/api/auth/logout";
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("StandardUser", policy =>
+                    policy.RequireAuthenticatedUser());
+            });
+
             return services;
         }
     }
