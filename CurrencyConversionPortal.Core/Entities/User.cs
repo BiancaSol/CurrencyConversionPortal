@@ -1,4 +1,4 @@
-namespace CurrencyConversionPortal.Core.Models
+namespace CurrencyConversionPortal.Core.Entities
 {
     public class User
     {

@@ -9,9 +9,13 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddCookieAuthentication();
 
-builder.Services.AddCoreServices(); 
+builder.Services.AddCoreServices();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
+
+app.AddExceptionHandler();
 
 app.UseHttpsRedirection();
 

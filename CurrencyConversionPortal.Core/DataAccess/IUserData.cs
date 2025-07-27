@@ -1,6 +1,6 @@
 ﻿namespace CurrencyConversionPortal.Core.DataAccess
 {
-    using CurrencyConversionPortal.Core.Models;
+    using Entities;
 
     public interface IUserData
     {
