@@ -19,8 +19,8 @@
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.SlidingExpiration = true;
-                options.LoginPath = "/api/Auth/login";
-                options.LogoutPath = "/api/Auth/logout";
+                options.LoginPath = "/api/auth/login";
+                options.LogoutPath = "/api/auth/logout";
             });
 
             return services;

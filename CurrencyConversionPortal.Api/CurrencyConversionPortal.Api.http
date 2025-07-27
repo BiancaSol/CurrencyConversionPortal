@@ -1,7 +1,7 @@
 @CurrencyConversionPortal.Api_HostAddress = http://localhost:5163
 
 ### Register a new user
-POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/register
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/auth/register
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ### Login with user credentials
 # @name login
-POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/login
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -20,7 +20,19 @@ Content-Type: application/json
 }
 
 ### Logout (requires authentication cookie from login)
-POST {{CurrencyConversionPortal.Api_HostAddress}}/api/Auth/logout
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/auth/logout
 Content-Type: application/json
+
+### Get supported currencies (requires authentication cookie from login)
+GET {{CurrencyConversionPortal.Api_HostAddress}}/api/currencies
+
+### Convert currency (requires authentication cookie from login)
+POST {{CurrencyConversionPortal.Api_HostAddress}}/api/currencies/convert
+Content-Type: application/json
+
+{
+  "amount": 100.6,
+  "sourceCurrency": "USD"
+}
 
 ###

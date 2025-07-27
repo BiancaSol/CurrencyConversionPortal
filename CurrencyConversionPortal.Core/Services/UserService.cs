@@ -1,8 +1,8 @@
 namespace CurrencyConversionPortal.Core.Services
 {
-    using CurrencyConversionPortal.Core.DataAccess;
-    using CurrencyConversionPortal.Core.Models;
     using BCrypt.Net;
+    using CurrencyConversionPortal.Core.DataAccess;
+    using CurrencyConversionPortal.Core.Entities;
 
     public class UserService : IUserService
     {
