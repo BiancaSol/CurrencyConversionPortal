@@ -11,23 +11,23 @@
     public class CurrencyData : ICurrencyData
     {
         private readonly IMemoryCache _cache;
-        private readonly ICurrencyConversionApiClient _apiClient;
+        private readonly ICurrencyConversionApiClient _currencyConversionApiClient;
         private const string SupportedCurrenciesKey = "supported-currencies";
 
-        public CurrencyData(IMemoryCache cache, ICurrencyConversionApiClient apiClient)
+        public CurrencyData(IMemoryCache cache, ICurrencyConversionApiClient currencyConversionApiClient)
         {
             _cache = cache;
-            _apiClient = apiClient;
+            _currencyConversionApiClient = currencyConversionApiClient;
         }
 
         public async Task<IEnumerable<Currency>> GetCurrenciesAsync()
         {
-            if (_cache.TryGetValue(SupportedCurrenciesKey, out List<Currency> cachedList))
+            if (_cache.TryGetValue(SupportedCurrenciesKey, out List<Currency>? cachedList) && cachedList != null)
             {
                 return cachedList;
             }
 
-            var supportedCurrencies = await _apiClient.GetAvailableCurrenciesAsync();
+            var supportedCurrencies = await _currencyConversionApiClient.GetAvailableCurrenciesAsync();
 
             var currencies = supportedCurrencies
                 .Select(x => new Currency

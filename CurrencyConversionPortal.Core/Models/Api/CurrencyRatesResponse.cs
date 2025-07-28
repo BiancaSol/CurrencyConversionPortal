@@ -6,6 +6,6 @@ namespace CurrencyConversionPortal.Core.Models.Api
     public class CurrencyRatesResponse
     {
         [JsonPropertyName("rates")]
-        public Dictionary<string, decimal> Rates { get; set; }
+        public Dictionary<string, decimal> Rates { get; set; } = null!;
     }
 }
