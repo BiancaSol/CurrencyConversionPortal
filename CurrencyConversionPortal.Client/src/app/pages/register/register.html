@@ -31,11 +31,15 @@
                 id="password" 
                 class="form-control"
                 [class.is-invalid]="submitted && password?.invalid"
+                [class.is-valid]="password?.valid && password?.value"
                 placeholder="Enter password">
               <div *ngIf="submitted && password?.invalid" class="invalid-feedback">
                 <div *ngIf="password?.errors?.['required']">Password is required.</div>
                 <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters.</div>
                 <div *ngIf="password?.errors?.['maxlength']">Password cannot exceed 100 characters.</div>
+              </div>
+              <div class="form-text">
+                Password must be at least 6 characters long.
               </div>
             </div>
 
@@ -48,10 +52,14 @@
                 id="confirmPassword" 
                 class="form-control"
                 [class.is-invalid]="submitted && confirmPassword?.invalid"
+                [class.is-valid]="confirmPassword?.valid && confirmPassword?.value && !confirmPassword?.errors?.['passwordMismatch']"
                 placeholder="Confirm password">
               <div *ngIf="submitted && confirmPassword?.invalid" class="invalid-feedback">
                 <div *ngIf="confirmPassword?.errors?.['required']">Please confirm your password.</div>
                 <div *ngIf="confirmPassword?.errors?.['passwordMismatch']">Passwords do not match.</div>
+              </div>
+              <div *ngIf="confirmPassword?.valid && confirmPassword?.value && password?.value === confirmPassword?.value" class="valid-feedback">
+                Passwords match!
               </div>
             </div>
 

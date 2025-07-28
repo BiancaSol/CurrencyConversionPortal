@@ -44,14 +44,22 @@ export class Register {
     const password = formGroup.get('password');
     const confirmPassword = formGroup.get('confirmPassword');
     
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    if (password.value !== confirmPassword.value) {
       confirmPassword.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
     } else {
-      const errors = confirmPassword?.errors;
-      if (errors && errors['passwordMismatch']) {
+      // Remove passwordMismatch error if passwords match
+      const errors = confirmPassword.errors;
+      if (errors) {
         delete errors['passwordMismatch'];
         if (Object.keys(errors).length === 0) {
-          confirmPassword?.setErrors(null);
+          confirmPassword.setErrors(null);
+        } else {
+          confirmPassword.setErrors(errors);
         }
       }
     }
