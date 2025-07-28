@@ -1,0 +1,91 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Create Account</h2>
+          
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Username Field -->
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input 
+                formControlName="username" 
+                id="username" 
+                class="form-control"
+                [class.is-invalid]="submitted && username?.invalid"
+                placeholder="Enter username">
+              <div *ngIf="submitted && username?.invalid" class="invalid-feedback">
+                <div *ngIf="username?.errors?.['required']">Username is required.</div>
+                <div *ngIf="username?.errors?.['minlength']">Username must be at least 3 characters.</div>
+                <div *ngIf="username?.errors?.['maxlength']">Username cannot exceed 50 characters.</div>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input 
+                type="password" 
+                formControlName="password" 
+                id="password" 
+                class="form-control"
+                [class.is-invalid]="submitted && password?.invalid"
+                placeholder="Enter password">
+              <div *ngIf="submitted && password?.invalid" class="invalid-feedback">
+                <div *ngIf="password?.errors?.['required']">Password is required.</div>
+                <div *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters.</div>
+                <div *ngIf="password?.errors?.['maxlength']">Password cannot exceed 100 characters.</div>
+              </div>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input 
+                type="password" 
+                formControlName="confirmPassword" 
+                id="confirmPassword" 
+                class="form-control"
+                [class.is-invalid]="submitted && confirmPassword?.invalid"
+                placeholder="Confirm password">
+              <div *ngIf="submitted && confirmPassword?.invalid" class="invalid-feedback">
+                <div *ngIf="confirmPassword?.errors?.['required']">Please confirm your password.</div>
+                <div *ngIf="confirmPassword?.errors?.['passwordMismatch']">Passwords do not match.</div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button 
+                class="btn btn-primary" 
+                type="submit" 
+                [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+              </button>
+            </div>
+          </form>
+
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="alert alert-success mt-3">
+            {{ successMessage }}
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Login Link -->
+          <div class="text-center mt-3">
+            <p class="mb-0">
+              Already have an account? 
+              <a routerLink="/login" class="text-decoration-none">Sign in here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

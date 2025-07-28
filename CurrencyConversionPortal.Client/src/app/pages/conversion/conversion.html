@@ -1,0 +1,75 @@
+<div class="conversion-container">
+  <h2>Currency Conversion</h2>
+  
+  <form [formGroup]="conversionForm" (ngSubmit)="onConvert()" class="conversion-form">
+    <div class="form-group">
+      <label for="amount">Amount to Convert:</label>
+      <input 
+        type="number" 
+        id="amount" 
+        formControlName="amount" 
+        placeholder="Enter amount"
+        class="form-control"
+        [class.is-invalid]="conversionForm.get('amount')?.invalid && conversionForm.get('amount')?.touched"
+        step="0.01"
+        min="0.01"
+      >
+      <div *ngIf="conversionForm.get('amount')?.invalid && conversionForm.get('amount')?.touched" class="invalid-feedback">
+        <div *ngIf="conversionForm.get('amount')?.errors?.['required']">Amount is required</div>
+        <div *ngIf="conversionForm.get('amount')?.errors?.['min']">Amount must be greater than 0</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="sourceCurrency">Source Currency:</label>
+      <select 
+        id="sourceCurrency" 
+        formControlName="sourceCurrency" 
+        class="form-control"
+        [class.is-invalid]="conversionForm.get('sourceCurrency')?.invalid && conversionForm.get('sourceCurrency')?.touched"
+        (change)="conversionResults = []"
+      >
+        <option value="">Select source currency</option>
+        <option *ngFor="let currency of currencies" [value]="currency.code">
+          {{currency.code}} - {{currency.name}}
+        </option>
+      </select>
+      <div *ngIf="conversionForm.get('sourceCurrency')?.invalid && conversionForm.get('sourceCurrency')?.touched" class="invalid-feedback">
+        Please select a source currency
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-primary"
+      [disabled]="conversionForm.invalid || loading"
+    >
+      <span *ngIf="loading">Converting...</span>
+      <span *ngIf="!loading">Convert</span>
+    </button>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{errorMessage}}
+  </div>
+
+  <div *ngIf="conversionResults.length > 0" class="results-container">
+    <h3>Conversion Results</h3>
+    <div class="results-info">
+      Converting {{conversionForm.get('amount')?.value}} {{conversionForm.get('sourceCurrency')?.value}} to:
+    </div>
+    <div class="results-list">
+      <div *ngFor="let result of conversionResults" class="result-item">
+        <div class="currency-info">
+          <span class="currency-code">{{result.currency.code}}</span>
+          <span class="currency-name">{{result.currency.name}}</span>
+        </div>
+        <span class="converted-value">{{result.convertedValue | number:'1.2-4'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading && conversionResults.length === 0" class="loading-message">
+    Loading currencies...
+  </div>
+</div>

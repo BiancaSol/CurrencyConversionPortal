@@ -1,0 +1,47 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Sign In</h2>
+          
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input formControlName="username" id="username" class="form-control"
+                     [class.is-invalid]="submitted && loginForm.get('username')?.invalid"
+                     placeholder="Enter username">
+              <div *ngIf="submitted && loginForm.get('username')?.invalid" class="invalid-feedback">
+                Username is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" formControlName="password" id="password" class="form-control"
+                     [class.is-invalid]="submitted && loginForm.get('password')?.invalid"
+                     placeholder="Enter password">
+              <div *ngIf="submitted && loginForm.get('password')?.invalid" class="invalid-feedback">
+                Password is required.
+              </div>
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-primary" type="submit">Sign In</button>
+            </div>
+          </form>
+          
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+          
+          <!-- Register Link -->
+          <div class="text-center mt-3">
+            <p class="mb-0">
+              Don't have an account? 
+              <a routerLink="/register" class="text-decoration-none">Create one here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
