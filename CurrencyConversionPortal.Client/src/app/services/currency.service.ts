@@ -36,11 +36,9 @@ export class CurrencyService {
 
   constructor(private http: HttpClient) {}  async getCurrencies(): Promise<Currency[]> {
     try {
-      console.log('Fetching currencies from:', `${this.apiUrl}/currencies`);
       const data = await firstValueFrom(
         this.http.get<ApiCurrenciesResponse>(`${this.apiUrl}/currencies`, { withCredentials: true })
       );
-      console.log('Successfully fetched currencies from API:', data);
       
       // Map the API response format to our internal format
       const currencies: Currency[] = data.currencies.map(apiCurrency => ({
@@ -62,7 +60,6 @@ export class CurrencyService {
         
         // If we get a 302 or 401, it means authentication is required
         if (error.status === 302 || error.status === 401) {
-          console.log('🔒 Authentication required for getCurrencies - throwing AUTHENTICATION_REQUIRED error');
           throw new Error('AUTHENTICATION_REQUIRED');
         }
       }
@@ -71,14 +68,12 @@ export class CurrencyService {
     }
   }  async convertCurrency(amount: number, sourceCurrency: string): Promise<ConversionResult[]> {
     try {
-      console.log('Converting currency via API:', { amount, sourceCurrency });
       const data = await firstValueFrom(
         this.http.post<ApiConversionResponse>(`${this.apiUrl}/currencies/convert`, {
           amount,
           sourceCurrency
         }, { withCredentials: true })
       );
-      console.log('Successfully converted currency via API:', data);
       
       // Get all currencies to map the converted amounts
       const allCurrencies = await this.getCurrencies();
@@ -109,7 +104,6 @@ export class CurrencyService {
         }
       }
       
-      console.log('Falling back to empty conversion results due to API error');
       return [];
     }
   }

@@ -39,7 +39,6 @@ export class Conversion implements OnInit {
       this.currencies = await this.currencyService.getCurrencies();
     } catch (error) {
       if (error instanceof Error && error.message === 'AUTHENTICATION_REQUIRED') {
-        console.log('Authentication required, redirecting to login...');
         this.router.navigate(['/login']);
         return;
       }
@@ -62,7 +61,6 @@ export class Conversion implements OnInit {
       this.conversionResults = results;
     } catch (error) {
       if (error instanceof Error && error.message === 'AUTHENTICATION_REQUIRED') {
-        console.log('Authentication required for conversion, redirecting to login...');
         this.router.navigate(['/login']);
         return;
       }
