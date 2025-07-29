@@ -85,7 +85,7 @@ export class Register {
           this.router.navigate(['/login']);
         }, 2000);
       } else {
-        this.errorMessage = result.message || 'Registration failed';
+        this.errorMessage = result.error || 'Registration failed. Please try again.';
       }
     } catch (error) {
       this.errorMessage = 'An unexpected error occurred';

@@ -9,12 +9,11 @@ namespace CurrencyConversionPortal.Core.ExternalServices
 
     public class CurrencyConversionApiClient : ICurrencyConversionApiClient
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "https://api.frankfurter.dev/v1";
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CurrencyConversionApiClient(HttpClient httpClient)
+        public CurrencyConversionApiClient(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<CurrencyRatesResponse> GetConversionRatesAsync(string sourceCurrency, List<string> targetCurrencies)
@@ -29,10 +28,12 @@ namespace CurrencyConversionPortal.Core.ExternalServices
                 throw new ArgumentException("Target currencies list cannot be empty", nameof(targetCurrencies));
             }
 
-            var symbols = string.Join(",", targetCurrencies);
-            var requestUrl = $"{_apiBaseUrl}/latest?base={sourceCurrency}&symbols={symbols}";
+            using var httpClient = _httpClientFactory.CreateClient(nameof(ICurrencyConversionApiClient));
 
-            var response = await _httpClient.GetAsync(requestUrl);
+            var symbols = string.Join(",", targetCurrencies);
+            var requestUrl = $"latest?base={sourceCurrency}&symbols={symbols}";
+
+            var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();
@@ -54,9 +55,10 @@ namespace CurrencyConversionPortal.Core.ExternalServices
 
         public async Task<Dictionary<string, string>> GetAvailableCurrenciesAsync()
         {
-            var requestUrl = $"{_apiBaseUrl}/currencies";
-            
-            var response = await _httpClient.GetAsync(requestUrl);
+            using var httpClient = _httpClientFactory.CreateClient(nameof(ICurrencyConversionApiClient));
+            const string requestUrl = "currencies";
+
+            var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
 
             using var stream = await response.Content.ReadAsStreamAsync();

@@ -36,13 +36,18 @@ export class Conversion implements OnInit {
   async loadCurrencies() {
     try {
       this.loading = true;
+      this.errorMessage = null;
       this.currencies = await this.currencyService.getCurrencies();
     } catch (error) {
-      if (error instanceof Error && error.message === 'AUTHENTICATION_REQUIRED') {
-        this.router.navigate(['/login']);
-        return;
+      if (error instanceof Error) {
+        if (error.message === 'AUTH_REQUIRED') {
+          this.router.navigate(['/login']);
+          return;
+        }
+        this.errorMessage = error.message;
+      } else {
+        this.errorMessage = 'Failed to load currencies';
       }
-      this.errorMessage = 'Failed to load currencies';
     } finally {
       this.loading = false;
     }
@@ -60,11 +65,15 @@ export class Conversion implements OnInit {
       const results = await this.currencyService.convertCurrency(amount, sourceCurrency);
       this.conversionResults = results;
     } catch (error) {
-      if (error instanceof Error && error.message === 'AUTHENTICATION_REQUIRED') {
-        this.router.navigate(['/login']);
-        return;
+      if (error instanceof Error) {
+        if (error.message === 'AUTH_REQUIRED') {
+          this.router.navigate(['/login']);
+          return;
+        }
+        this.errorMessage = error.message;
+      } else {
+        this.errorMessage = 'Conversion failed. Please try again.';
       }
-      this.errorMessage = 'Conversion failed. Please try again.';
     } finally {
       this.loading = false;
     }

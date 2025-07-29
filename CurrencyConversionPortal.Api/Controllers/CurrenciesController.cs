@@ -23,9 +23,7 @@ namespace CurrencyConversionPortal.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var currencies = await _currencyService.GetCurrenciesAsync();
-
             var dtos = currencies.Select(c => new CurrencyDto { Code = c.Code, Description = c.Description });
-
             return Ok(new { currencies = dtos });
         }
 

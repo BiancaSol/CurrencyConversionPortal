@@ -20,7 +20,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddCookieAuthentication();
 
-builder.Services.AddCoreServices();
+builder.Services.AddCoreServices(builder.Configuration);
 
 builder.Services.AddHttpClient();
 

@@ -1,8 +1,9 @@
 namespace CurrencyConversionPortal.Core.Services
 {
-    using CurrencyConversionPortal.Core.ExternalServices;
     using CurrencyConversionPortal.Core.DataAccess;
     using CurrencyConversionPortal.Core.Entities;
+    using CurrencyConversionPortal.Core.Exceptions;
+    using CurrencyConversionPortal.Core.ExternalServices;
     using CurrencyConversionPortal.Core.Models;
     using CurrencyConversionPortal.Core.Models.Api;
     using System;
@@ -24,7 +25,14 @@ namespace CurrencyConversionPortal.Core.Services
 
         public async Task<IEnumerable<Currency>> GetCurrenciesAsync()
         {
-            return await _currencyData.GetCurrenciesAsync();
+            try
+            {
+                return await _currencyData.GetCurrenciesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalServiceException("Failed to retrieve available currencies", ex);
+            }
         }
 
         public async Task<ConversionModel> ConvertAsync(decimal amount, string sourceCurrency)
@@ -43,11 +51,19 @@ namespace CurrencyConversionPortal.Core.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new InvalidOperationException($"Currency conversion API request failed: {ex.Message}", ex);
+                throw new ExternalServiceException($"Currency conversion service is temporarily unavailable", ex);
             }
             catch (JsonException ex)
             {
-                throw new InvalidOperationException($"Failed to parse currency conversion API response: {ex.Message}", ex);
+                throw new ExternalServiceException($"Failed to process currency conversion response", ex);
+            }
+            catch (ValidationException)
+            {
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalServiceException("An unexpected error occurred during currency conversion", ex);
             }
         }
 
@@ -55,25 +71,32 @@ namespace CurrencyConversionPortal.Core.Services
         {
             if (amount <= 0)
             {
-                throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+                throw new ValidationException("Amount must be greater than zero");
             }
 
             if (string.IsNullOrWhiteSpace(sourceCurrency))
             {
-                throw new ArgumentException("Source currency cannot be empty", nameof(sourceCurrency));
+                throw new ValidationException("Source currency cannot be empty");
             }
         }
 
         private async Task<List<string>> GetCurrencyCodesAsync()
         {
-            return (await _currencyData.GetCurrenciesAsync()).Select(c => c.Code).ToList();
+            try
+            {
+                return (await _currencyData.GetCurrenciesAsync()).Select(c => c.Code).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ExternalServiceException("Failed to retrieve available currency codes", ex);
+            }
         }
 
         private void ValidateCurrencyCode(string currencyCode, List<string> availableCurrencies)
         {
             if (!availableCurrencies.Contains(currencyCode, StringComparer.OrdinalIgnoreCase))
             {
-                throw new ArgumentException($"Invalid source currency: {currencyCode}", nameof(currencyCode));
+                throw new ValidationException($"Invalid source currency: {currencyCode}. Please use a supported currency code.");
             }
         }
 
