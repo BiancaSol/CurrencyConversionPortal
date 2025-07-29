@@ -27,7 +27,8 @@ namespace CurrencyConversionPortal.Core.Services
         {
             try
             {
-                return await _currencyData.GetCurrenciesAsync();
+                var currencies = await _currencyData.GetCurrenciesAsync();
+                return currencies ?? new List<Currency>();
             }
             catch (Exception ex)
             {
