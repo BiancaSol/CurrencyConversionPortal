@@ -15,6 +15,7 @@ export class Conversion implements OnInit {
   conversionForm: FormGroup;
   currencies: Currency[] = [];
   conversionResults: ConversionResult[] = [];
+  conversionContext: { amount: number; sourceCurrency: string } | null = null;
   loading = false;
   errorMessage: string | null = null;
 
@@ -64,6 +65,8 @@ export class Conversion implements OnInit {
     try {
       const results = await this.currencyService.convertCurrency(amount, sourceCurrency);
       this.conversionResults = results;
+      // Store the conversion context to display in the results
+      this.conversionContext = { amount, sourceCurrency };
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === 'AUTH_REQUIRED') {
@@ -82,5 +85,15 @@ export class Conversion implements OnInit {
   get targetCurrencies(): Currency[] {
     const sourceCurrency = this.conversionForm.get('sourceCurrency')?.value;
     return this.currencies.filter(currency => currency.code !== sourceCurrency);
+  }
+
+  get needsNewConversion(): boolean {
+    if (!this.conversionContext) return false;
+    
+    const currentAmount = this.conversionForm.get('amount')?.value;
+    const currentSource = this.conversionForm.get('sourceCurrency')?.value;
+    
+    return this.conversionContext.amount !== currentAmount || 
+           this.conversionContext.sourceCurrency !== currentSource;
   }
 }

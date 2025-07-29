@@ -27,7 +27,7 @@
         formControlName="sourceCurrency" 
         class="form-control"
         [class.is-invalid]="conversionForm.get('sourceCurrency')?.invalid && conversionForm.get('sourceCurrency')?.touched"
-        (change)="conversionResults = []"
+        (change)="conversionResults = []; conversionContext = null"
       >
         <option value="">Select source currency</option>
         <option *ngFor="let currency of currencies" [value]="currency.code">
@@ -41,11 +41,14 @@
 
     <button 
       type="submit" 
-      class="btn btn-primary"
+      class="btn"
+      [class.btn-primary]="!needsNewConversion"
+      [class.btn-warning]="needsNewConversion"
       [disabled]="conversionForm.invalid || loading"
     >
       <span *ngIf="loading">Converting...</span>
-      <span *ngIf="!loading">Convert</span>
+      <span *ngIf="!loading && needsNewConversion">Update Conversion</span>
+      <span *ngIf="!loading && !needsNewConversion">Convert</span>
     </button>
   </form>
 
@@ -53,10 +56,13 @@
     {{errorMessage}}
   </div>
 
-  <div *ngIf="conversionResults.length > 0" class="results-container">
+  <div *ngIf="conversionResults.length > 0 && conversionContext" class="results-container">
     <h3>Conversion Results</h3>
+    <div *ngIf="needsNewConversion" class="alert alert-warning">
+      <strong>Note:</strong> You've changed the amount or currency. Click "Convert" to see updated results.
+    </div>
     <div class="results-info">
-      Converting {{conversionForm.get('amount')?.value}} {{conversionForm.get('sourceCurrency')?.value}} to:
+      Converting {{conversionContext.amount}} {{conversionContext.sourceCurrency}} to:
     </div>
     <div class="results-list">
       <div *ngFor="let result of conversionResults" class="result-item">
