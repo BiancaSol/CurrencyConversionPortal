@@ -4,7 +4,7 @@
 
     public static class AuthenticationExtensions
     {
-        public static IServiceCollection AddCookieAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddCookieAuthentication(this IServiceCollection services, IWebHostEnvironment environment)
         {
             services.AddAuthentication(options =>
             {
@@ -16,7 +16,9 @@
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = environment.IsDevelopment() 
+                    ? CookieSecurePolicy.SameAsRequest 
+                    : CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.SlidingExpiration = true;
                 options.LoginPath = "/api/auth/login";
