@@ -59,7 +59,7 @@ The application is configured to work with HTTP in development:
 - **API**: HTTPS (secure cookies enforced)
 - **Frontend**: HTTPS with SSL enabled
 - **Cookies**: `SecurePolicy.Always` (requires HTTPS)
-- **CORS**: Update `ymyportaldomain.com` in Program.cs
+- **CORS**: Update `myportaldomain.com` in Program.cs
 
 ## Architecture
 
