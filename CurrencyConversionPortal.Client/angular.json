@@ -42,7 +42,13 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -55,15 +61,16 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "ssl": true,
             "port": 4200
           },
           "configurations": {
             "production": {
-              "buildTarget": "CurrencyConversionPortal.Client:build:production"
+              "buildTarget": "CurrencyConversionPortal.Client:build:production",
+              "ssl": true
             },
             "development": {
-              "buildTarget": "CurrencyConversionPortal.Client:build:development"
+              "buildTarget": "CurrencyConversionPortal.Client:build:development",
+              "ssl": false
             }
           },
           "defaultConfiguration": "development"

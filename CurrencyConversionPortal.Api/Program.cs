@@ -3,22 +3,13 @@ using CurrencyConversionPortal.Core.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngularApp", policy =>
-    {
-        policy.WithOrigins("https://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
+builder.Services.AddCorsPolicies(builder.Environment);
 
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
 
-builder.Services.AddCookieAuthentication();
+builder.Services.AddCookieAuthentication(builder.Environment);
 
 builder.Services.AddCoreServices(builder.Configuration);
 
