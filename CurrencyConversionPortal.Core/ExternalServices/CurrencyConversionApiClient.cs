@@ -29,7 +29,7 @@ namespace CurrencyConversionPortal.Core.ExternalServices
             }
 
             using var httpClient = _httpClientFactory.CreateClient(nameof(ICurrencyConversionApiClient));
-            
+
             var symbols = string.Join(",", targetCurrencies);
             var requestUrl = $"latest?base={sourceCurrency}&symbols={symbols}";
 
@@ -57,7 +57,7 @@ namespace CurrencyConversionPortal.Core.ExternalServices
         {
             using var httpClient = _httpClientFactory.CreateClient(nameof(ICurrencyConversionApiClient));
             const string requestUrl = "currencies";
-            
+
             var response = await httpClient.GetAsync(requestUrl);
             response.EnsureSuccessStatusCode();
 
@@ -72,4 +72,5 @@ namespace CurrencyConversionPortal.Core.ExternalServices
 
             return currencies ?? new Dictionary<string, string>();
         }
+    }
 }

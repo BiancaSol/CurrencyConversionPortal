@@ -34,11 +34,11 @@ export class Login {
   if (this.loginForm.invalid) return;
 
   const { username, password } = this.loginForm.value;
-  const success = await this.auth.login(username, password);
-  if (success) {
+  const result = await this.auth.login(username, password);
+  if (result.success) {
     this.router.navigate(['/conversion']);
   } else {
-    this.errorMessage = 'Invalid username or password.';
+    this.errorMessage = result.error || 'Login failed. Please try again.';
   }
 }
 }

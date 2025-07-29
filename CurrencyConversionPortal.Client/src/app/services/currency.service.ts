@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../environments/environment';
+import { ErrorService } from './error.service';
 
 export interface Currency {
   code: string;
@@ -34,7 +35,10 @@ export interface ConversionResult {
 export class CurrencyService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}  async getCurrencies(): Promise<Currency[]> {
+  constructor(
+    private http: HttpClient,
+    private errorService: ErrorService
+  ) {}  async getCurrencies(): Promise<Currency[]> {
     try {
       const data = await firstValueFrom(
         this.http.get<ApiCurrenciesResponse>(`${this.apiUrl}/currencies`, { withCredentials: true })
@@ -48,23 +52,20 @@ export class CurrencyService {
       
       return currencies;
     } catch (error) {
-      console.error('Error fetching currencies from API:', error);
-      
       if (error instanceof HttpErrorResponse) {
-        console.error('HTTP Error Details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          url: error.url
-        });
-        
-        // If we get a 302 or 401, it means authentication is required
-        if (error.status === 302 || error.status === 401) {
-          throw new Error('AUTHENTICATION_REQUIRED');
+        // Check if authentication is required (including 405 on login URLs which indicates a 302 redirect was followed)
+        if (this.errorService.isAuthError(error) || 
+            (error.status === 405 && error.url && error.url.includes('/auth/login'))) {
+          // Trigger the redirect to login page
+          this.errorService.handleAuthError(error);
+          throw new Error('AUTH_REQUIRED');
         }
+        
+        // Throw with user-friendly message
+        throw new Error(this.errorService.getErrorMessage(error));
       }
-
-      return [];
+      
+      throw new Error('Unable to load currencies');
     }
   }  async convertCurrency(amount: number, sourceCurrency: string): Promise<ConversionResult[]> {
     try {
@@ -89,22 +90,20 @@ export class CurrencyService {
       
       return results;
     } catch (error) {
-      console.error('Error converting currency via API:', error);
-      
       if (error instanceof HttpErrorResponse) {
-        console.error('HTTP Error Details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          url: error.url
-        });
-        
-        if (error.status === 302 || error.status === 401) {
-          throw new Error('AUTHENTICATION_REQUIRED');
+        // Check if authentication is required (including 405 on login URLs which indicates a 302 redirect was followed)
+        if (this.errorService.isAuthError(error) || 
+            (error.status === 405 && error.url && error.url.includes('/auth/login'))) {
+          // Trigger the redirect to login page
+          this.errorService.handleAuthError(error);
+          throw new Error('AUTH_REQUIRED');
         }
+        
+        // Throw with user-friendly message
+        throw new Error(this.errorService.getErrorMessage(error));
       }
       
-      return [];
+      throw new Error('Unable to convert currency');
     }
   }
 }
