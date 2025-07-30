@@ -19,7 +19,6 @@ export class Navbar implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Check if user is authenticated by checking current route
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;
       this.isAuthenticated = this.currentRoute !== '/login' && this.currentRoute !== '/register';
@@ -33,7 +32,6 @@ export class Navbar implements OnInit {
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Logout error:', error);
-      // Navigate to login anyway
       this.router.navigate(['/login']);
     }
   }
