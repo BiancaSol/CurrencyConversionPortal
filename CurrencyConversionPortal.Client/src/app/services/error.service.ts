@@ -28,6 +28,11 @@ export class ErrorService {
       }
     }
 
+    if (error.status === 401 && error.error && typeof error.error === 'string') {
+
+      return error.error;
+    }
+
     switch (error.status) {
       case 400:
         return 'Invalid request. Please check your input.';
@@ -85,7 +90,9 @@ export class ErrorService {
     if (message.includes('external service')) {
       return 'Currency service is temporarily unavailable. Please try again later.';
     }
-    if (message.includes('unauthorized')) {
+    // For authentication errors, if the message is specific (like "Invalid username or password"), 
+    // preserve it instead of converting to generic message
+    if (message.includes('unauthorized') && !message.includes('invalid') && !message.includes('password') && !message.includes('username')) {
       return 'Please log in to continue.';
     }
 
