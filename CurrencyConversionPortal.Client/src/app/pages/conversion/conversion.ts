@@ -65,7 +65,6 @@ export class Conversion implements OnInit {
     try {
       const results = await this.currencyService.convertCurrency(amount, sourceCurrency);
       this.conversionResults = results;
-      // Store the conversion context to display in the results
       this.conversionContext = { amount, sourceCurrency };
     } catch (error) {
       if (error instanceof Error) {

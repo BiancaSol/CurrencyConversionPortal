@@ -44,7 +44,6 @@ export class CurrencyService {
         this.http.get<ApiCurrenciesResponse>(`${this.apiUrl}/currencies`, { withCredentials: true })
       );
       
-      // Map the API response format to our internal format
       const currencies: Currency[] = data.currencies.map(apiCurrency => ({
         code: apiCurrency.code,
         name: apiCurrency.description
@@ -53,15 +52,12 @@ export class CurrencyService {
       return currencies;
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        // Check if authentication is required (including 405 on login URLs which indicates a 302 redirect was followed)
         if (this.errorService.isAuthError(error) || 
             (error.status === 405 && error.url && error.url.includes('/auth/login'))) {
-          // Trigger the redirect to login page
           this.errorService.handleAuthError(error);
           throw new Error('AUTH_REQUIRED');
         }
         
-        // Throw with user-friendly message
         throw new Error(this.errorService.getErrorMessage(error));
       }
       
@@ -76,10 +72,8 @@ export class CurrencyService {
         }, { withCredentials: true })
       );
       
-      // Get all currencies to map the converted amounts
       const allCurrencies = await this.getCurrencies();
-      
-      // Convert the API response format to our internal format
+    
       const results: ConversionResult[] = Object.entries(data.convertedAmounts).map(([currencyCode, convertedValue]) => {
         const currency = allCurrencies.find(c => c.code === currencyCode);
         return {
@@ -91,15 +85,11 @@ export class CurrencyService {
       return results;
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        // Check if authentication is required (including 405 on login URLs which indicates a 302 redirect was followed)
         if (this.errorService.isAuthError(error) || 
             (error.status === 405 && error.url && error.url.includes('/auth/login'))) {
-          // Trigger the redirect to login page
           this.errorService.handleAuthError(error);
           throw new Error('AUTH_REQUIRED');
         }
-        
-        // Throw with user-friendly message
         throw new Error(this.errorService.getErrorMessage(error));
       }
       

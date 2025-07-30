@@ -14,12 +14,10 @@ export class ErrorService {
    * Extract user-friendly error message from HTTP error response
    */
   getErrorMessage(error: HttpErrorResponse): string {
-    // Handle network errors
     if (error.status === 0) {
       return 'Unable to connect to the server. Please check your connection.';
     }
 
-    // Try to get API error response
     if (error.error && typeof error.error === 'object') {
       const apiError = error.error as ApiError;
       if (apiError.details) {
@@ -30,7 +28,6 @@ export class ErrorService {
       }
     }
 
-    // Fallback based on status code
     switch (error.status) {
       case 400:
         return 'Invalid request. Please check your input.';
@@ -68,18 +65,7 @@ export class ErrorService {
    * Handle authentication errors by redirecting to login
    */
   handleAuthError(error: HttpErrorResponse): void {
-    console.log('ErrorService.handleAuthError called with:', {
-      status: error.status,
-      url: error.url,
-      isAuthError: this.isAuthError(error)
-    });
-
     if (this.isAuthError(error) || (error.status === 405 && error.url && error.url.includes('/auth/login'))) {
-      // Clear any stored authentication data if needed
-      // localStorage.removeItem('token'); // Add if you store tokens
-      
-      console.log('Redirecting to /login');
-      // Redirect to login page
       this.router.navigate(['/login']);
     }
   }
@@ -103,7 +89,6 @@ export class ErrorService {
       return 'Please log in to continue.';
     }
 
-    // Return the original API message if it's user-friendly, otherwise use status-based message
     return apiErrorMessage.length < 100 ? apiErrorMessage : this.getErrorMessage({ status: statusCode } as HttpErrorResponse);
   }
 }

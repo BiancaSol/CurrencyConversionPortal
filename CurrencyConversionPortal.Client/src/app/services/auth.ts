@@ -42,7 +42,6 @@ export class AuthService {
       await firstValueFrom(this.http.post(this.baseUrl + '/logout', {}, { withCredentials: true }));
     } catch (error) {
       console.error('Logout error:', error);
-      // Continue with logout even if API call fails
     }
   }
 }

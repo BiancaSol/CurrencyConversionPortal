@@ -1,9 +1,8 @@
 .main-content {
-  min-height: calc(100vh - 56px); // Adjust for navbar height
+  min-height: calc(100vh - 56px);
   background-color: #f8f9fa;
 }
 
-// Ensure the app takes full height
 :host {
   display: flex;
   flex-direction: column;

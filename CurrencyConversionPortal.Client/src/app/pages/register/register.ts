@@ -52,7 +52,6 @@ export class Register {
       confirmPassword.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     } else {
-      // Remove passwordMismatch error if passwords match
       const errors = confirmPassword.errors;
       if (errors) {
         delete errors['passwordMismatch'];
