@@ -13,8 +13,6 @@ builder.Services.AddCookieAuthentication(builder.Environment);
 
 builder.Services.AddCoreServices(builder.Configuration);
 
-builder.Services.AddHttpClient();
-
 var app = builder.Build();
 
 app.AddExceptionHandler();
